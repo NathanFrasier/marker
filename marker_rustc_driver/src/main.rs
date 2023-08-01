@@ -237,7 +237,7 @@ fn main() {
         // in preparation.
         if !has_sys_root_arg {
             let sys_root = find_sys_root(sys_root_arg);
-            orig_args.extend(vec!["--sysroot".into(), sys_root]);
+            orig_args.extend(["--sysroot".into(), sys_root]);
         };
 
         // make "marker_rustc_driver --rustc" work like a subcommand that passes
@@ -279,6 +279,10 @@ fn main() {
             display_help();
             exit(0);
         }
+
+        // We need to provide a marker cfg flag to allow conditional compilation,
+        // preferably per crate, but for starters, we'll add a simple one here
+        orig_args.extend(["--cfg=marker".into()]);
 
         // We enable Marker if one of the following conditions is met
         // - IF Marker is run on the main crate, not on deps (`!cap_lints_allow`) THEN
